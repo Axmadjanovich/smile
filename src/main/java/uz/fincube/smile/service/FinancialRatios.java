@@ -87,6 +87,8 @@ public class FinancialRatios {
                 DoubleVector.of("monthly_free_cash_flow", monthlyFreeCashFlow.stream().mapToDouble(Double::doubleValue).toArray())
         );
 
+        System.out.println("\n\n\n\n\n========================================FINANCIAL RATIOS=======================================\n\n\n\n");
+
         System.out.println(df.structure());
         System.out.println(df.summary());
     }
