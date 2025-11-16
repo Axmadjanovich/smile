@@ -1,9 +1,13 @@
 package uz.fincube.smile.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.Data;
 
 @Data
+@Entity
 public class LoanDetails {
+    @Id
     public int customerId;
     public String loanType;
     public double loanAmount;

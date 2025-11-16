@@ -1,9 +1,13 @@
 package uz.fincube.smile.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.Data;
 
 @Data
+@Entity
 public class ApplicationMetadata {
+    @Id
     public int customerRef;
     public int applicationId;
     public int applicationHour;

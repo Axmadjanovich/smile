@@ -2,12 +2,15 @@ package uz.fincube.smile.service;
 
 import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import smile.data.DataFrame;
 import smile.data.vector.DoubleVector;
 import smile.data.vector.IntVector;
 import smile.io.JSON;
 import smile.io.Read;
+import uz.fincube.smile.entity.FinancialRatiosEntity;
+import uz.fincube.smile.repo.FinancialRatiosRepo;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -19,6 +22,9 @@ import java.util.Map;
 
 @Service
 public class FinancialRatios {
+
+    @Autowired
+    private FinancialRatiosRepo financialRatiosRepo;
 
     public void read(String path) throws IOException, URISyntaxException {
 
@@ -86,6 +92,33 @@ public class FinancialRatios {
                 DoubleVector.of("total_debt_amount", totalDebtAmount.stream().mapToDouble(Double::doubleValue).toArray()),
                 DoubleVector.of("monthly_free_cash_flow", monthlyFreeCashFlow.stream().mapToDouble(Double::doubleValue).toArray())
         );
+
+        List<FinancialRatiosEntity> list = new ArrayList<>();
+
+        for (int i = 0; i < custNum.size(); i++) {
+            FinancialRatiosEntity fr = FinancialRatiosEntity.builder()
+                    .custNum(custNum.get(i))
+                    .monthlyIncome(monthlyIncome.get(i))
+                    .existingDebt(existingDebt.get(i))
+                    .monthlyPayment(monthlyPayment.get(i))
+                    .debtToIncome(debtToIncome.get(i))
+                    .debtServiceRatio(debtServiceRatio.get(i))
+                    .paymentToIncomeRatio(paymentToIncomeRatio.get(i))
+                    .creditUtilization(creditUtilization.get(i))
+                    .revolvingBalance(revolvingBalance.get(i))
+                    .creditUsageAmount(creditUsageAmount.get(i))
+                    .availableCredit(availableCredit.get(i))
+                    .totalMonthlyDebtPayment(totalMonthlyDebtPayment.get(i))
+                    .annualDebtPayment(annualDebtPayment.get(i))
+                    .loanToAnnualIncome(loanToAnnualIncome.get(i))
+                    .totalDebtAmount(totalDebtAmount.get(i))
+                    .monthlyFreeCashFlow(monthlyFreeCashFlow.get(i))
+                    .build();
+
+            list.add(fr);
+        }
+
+        financialRatiosRepo.saveAll(list);
 
         System.out.println("\n\n\n\n\n========================================FINANCIAL RATIOS=======================================\n\n\n\n");
 

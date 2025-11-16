@@ -4,11 +4,13 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import smile.data.DataFrame;
 import smile.data.vector.DoubleVector;
 import smile.io.Read;
 import uz.fincube.smile.model.ApplicationMetadata;
+import uz.fincube.smile.repo.ApplicationMetadataRepo;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -22,6 +24,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class ApplicationMetadataService {
+
+    @Autowired
+    private ApplicationMetadataRepo applicationMetadataRepo;
 
     public List<ApplicationMetadata> loadCleanAndSort(String filePath) throws IOException {
         Reader reader = Files.newBufferedReader(Paths.get(filePath));
@@ -40,9 +45,13 @@ public class ApplicationMetadataService {
         parser.close();
 
         // СОРТИРОВКА (например, по customerRef)
-        return records.stream()
+        var list = records.stream()
                 .sorted(Comparator.comparingInt(r -> r.customerRef))
                 .collect(Collectors.toList());
+
+        applicationMetadataRepo.saveAll(list);
+
+        return list;
     }
 
     private ApplicationMetadata mapRecord(CSVRecord row) {

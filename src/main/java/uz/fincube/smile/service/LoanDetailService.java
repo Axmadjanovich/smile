@@ -5,7 +5,10 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import uz.fincube.smile.model.LoanDetails;
+import uz.fincube.smile.repo.LoanDetailRepo;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -14,9 +17,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+@Service
 public class LoanDetailService {
 
-
+    @Autowired
+    private LoanDetailRepo loanDetailRepo;
 
     public List<LoanDetails> loadCleanAndSort(String path) throws IOException {
 
@@ -52,6 +57,8 @@ public class LoanDetailService {
         fis.close();
 
         list.sort(Comparator.comparingInt(r -> r.customerId));
+
+        loanDetailRepo.saveAll(list);
 
         return list;
     }
