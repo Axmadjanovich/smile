@@ -31,6 +31,9 @@ public class SmileApplication {
     @Autowired
     private LoanDetailService loanDetailService;
 
+    @Autowired
+    private Teaching teaching;
+
     public static void main(String[] args) throws IOException, URISyntaxException {
         SpringApplication.run(SmileApplication.class, args);
     }
@@ -57,8 +60,10 @@ public class SmileApplication {
 //        demographics.read("src/main/resources/demographics.csv");
 //        financialRatios.read("src/main/resources/financial_ratios.jsonl");
 //        creditHistory.read("src/main/resources/credit_history.parquet");
-        applicationMetadataService.loadCleanAndSort("src/main/resources/application_metadata.csv");
-        loanDetailService.loadCleanAndSort("src/main/resources/loan_details.xlsx");
+//        applicationMetadataService.loadCleanAndSort("src/main/resources/application_metadata.csv");
+//        loanDetailService.loadCleanAndSort("src/main/resources/loan_details.xlsx");
+
+        teaching.trainModel("src/main/resources/final.csv");
     }
 
 }
